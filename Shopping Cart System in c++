@@ -1,0 +1,185 @@
+#include <iostream>
+#include <string>
+#include <iomanip> // for fixed and setprecision
+
+using namespace std;
+
+class ATM {
+private:
+    string accountHolder;
+    int pin;
+    double balance;
+
+public:
+    ATM(string name, int pinCode, double initialBalance) {
+        accountHolder = name;
+        pin = pinCode;
+        balance = initialBalance;
+    }
+
+    bool verifyPin(int enteredPin) {
+        return enteredPin == pin;
+    }
+
+    void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            cout << "✅ Successfully deposited: ₹" << fixed << setprecision(2) << amount << endl;
+        } else {
+            cout << "❌ Deposit amount must be positive." << endl;
+        }
+    }
+
+    void withdraw(double amount) {
+        if (amount <= 0) {
+            cout << "❌ Withdrawal amount must be positive." << endl;
+        } else if (amount > balance) {
+            cout << "❌ Insufficient funds." << endl;
+        } else {
+            balance -= amount;
+            cout << "✅ Successfully withdrew: ₹" << fixed << setprecision(2) << amount << endl;
+        }
+    }
+
+    void checkBalance() {
+        cout << "💰 Current balance: ₹" << fixed << setprecision(2) << balance << endl;
+    }
+
+    void changePin(int oldPin, int newPin) {
+        if (oldPin == pin) {
+            pin = newPin;
+            cout << "🔑 PIN changed successfully!" << endl;
+        } else {
+            cout << "❌ Incorrect old PIN." << endl;
+        }
+    }
+
+    void showAccountDetails() {
+        cout << "\n=== ACCOUNT DETAILS ===" << endl;
+        cout << "👤 Account Holder: " << accountHolder << endl;
+        cout << "💰 Current Balance: ₹" << fixed << setprecision(2) << balance << endl;
+        cout << "========================\n" << endl;
+    }
+};
+
+// ---------------- Main Function ----------------
+int main() {
+    cout << "🏦 Welcome to the Simple ATM System\n" << endl;
+
+    string name;
+    int pin;
+    double initialBalance;
+
+    cout << "Enter account holder's name: ";
+    getline(cin, name);
+
+    cout << "Set your 4-digit ATM PIN: ";
+    cin >> pin;
+
+    cout << "Enter initial balance: ₹";
+    cin >> initialBalance;
+
+    ATM atm(name, pin, initialBalance);
+    cout << "\n✅ Account created successfully for " << name << "!\n" << endl;
+
+    int choice;
+    do {
+        cout << "\n======= ATM MAIN MENU =======\n";
+        cout << "1. Deposit\n";
+        cout << "2. Withdraw\n";
+        cout << "3. Check Balance\n";
+        cout << "4. Change PIN\n";
+        cout << "5. Account Details\n";
+        cout << "6. About Bank\n";
+        cout << "7. Exit\n";
+        cout << "=============================\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1: {
+                int enteredPin;
+                cout << "Enter PIN: ";
+                cin >> enteredPin;
+
+                if (atm.verifyPin(enteredPin)) {
+                    double depositAmount;
+                    cout << "Enter amount to deposit: ₹";
+                    cin >> depositAmount;
+                    atm.deposit(depositAmount);
+                } else {
+                    cout << "❌ Invalid PIN!" << endl;
+                }
+                break;
+            }
+
+            case 2: {
+                int enteredPin;
+                cout << "Enter PIN: ";
+                cin >> enteredPin;
+
+                if (atm.verifyPin(enteredPin)) {
+                    double withdrawAmount;
+                    cout << "Enter amount to withdraw: ₹";
+                    cin >> withdrawAmount;
+                    atm.withdraw(withdrawAmount);
+                } else {
+                    cout << "❌ Invalid PIN!" << endl;
+                }
+                break;
+            }
+
+            case 3: {
+                int enteredPin;
+                cout << "Enter PIN: ";
+                cin >> enteredPin;
+
+                if (atm.verifyPin(enteredPin)) {
+                    atm.checkBalance();
+                } else {
+                    cout << "❌ Invalid PIN!" << endl;
+                }
+                break;
+            }
+
+            case 4: {
+                int oldPin, newPin;
+                cout << "Enter current PIN: ";
+                cin >> oldPin;
+                cout << "Enter new PIN: ";
+                cin >> newPin;
+                atm.changePin(oldPin, newPin);
+                break;
+            }
+
+            case 5: {
+                int enteredPin;
+                cout << "Enter PIN: ";
+                cin >> enteredPin;
+
+                if (atm.verifyPin(enteredPin)) {
+                    atm.showAccountDetails();
+                } else {
+                    cout << "❌ Invalid PIN!" << endl;
+                }
+                break;
+            }
+
+            case 6:
+                cout << "\n🏛 About Our Bank:\n";
+                cout << "This is a demo ATM system built in C++.\n";
+                cout << "It allows deposits, withdrawals, and balance checking securely.\n";
+                break;
+
+            case 7:
+                cout << "\n🙏 Thank you for using our ATM. Goodbye!\n";
+                break;
+
+            default:
+                cout << "❌ Invalid choice. Please try again.\n";
+        }
+
+    } while (choice != 7);
+
+    return 0;
+}
